@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,9 +32,9 @@ class SignInFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        setStatusColor()
+    ): View {
         binding = FragmentSignInBinding.inflate(layoutInflater)
+        setStatusColor()
 
 
         getUserNumber()
@@ -43,8 +44,6 @@ class SignInFragment : Fragment() {
         return binding.root
 
 
-
-
     }
 
     private fun onContinueButtonClick() {
@@ -52,10 +51,9 @@ class SignInFragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             val number = binding.etusernumber.text.toString()
 
-            if (number.isEmpty() || number.length != 10){
-                Utils.showToast(requireContext(),"Please enter a valid phone number")
-            }
-            else{
+            if (number.isEmpty() || number.length != 10) {
+                Utils.showToast(requireContext(), "Please enter a valid phone number")
+            } else {
                 val bundle = Bundle()
                 bundle.putString("number", number)
                 findNavController().navigate(R.id.action_signInFragment_to_otpFragment, bundle)
@@ -65,29 +63,39 @@ class SignInFragment : Fragment() {
     }
 
     private fun getUserNumber() {
-        binding.etusernumber.addTextChangedListener { object : TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                TODO("Not yet implemented")
+
+
+        binding.etusernumber.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
-            override fun onTextChanged(number: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+            override fun onTextChanged(number: CharSequence?, start: Int, before: Int, count: Int) {
                 val len = number?.length
+                Log.e("skhkjlhfjdfsdf", "onTextChanged: $len")
 
-                if (len == 10){
-                    binding.btnContinue.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.green))
+                if (len == 10) {
+                    binding.btnContinue.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.green
+                        )
+                    )
+                } else {
+                    binding.btnContinue.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.grayish_blue
+                        )
+                    )
                 }
-                else{
-                    binding.btnContinue.setBackgroundColor(ContextCompat.getColor(requireContext(),R.color.grayish_blue))
-                }
-
             }
 
-            override fun afterTextChanged(p0: Editable?) {
-                TODO("Not yet implemented")
+            override fun afterTextChanged(s: Editable?) {
             }
 
-        } }
+        })
     }
 
 
@@ -96,10 +104,11 @@ class SignInFragment : Fragment() {
         activity?.window?.apply {
             val statusBarColors = ContextCompat.getColor(requireContext(), R.color.yellow)
             statusBarColor = statusBarColors
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
         }
     }
+
 
 }

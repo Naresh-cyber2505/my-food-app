@@ -1,5 +1,6 @@
 package com.example.myfoodapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.myfoodapp.activity.UsersMainActivity
 import com.example.myfoodapp.databinding.FragmentOtpBinding
+import com.example.myfoodapp.models.Users
 import com.example.myfoodapp.viewmodels.AuthViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -66,13 +69,16 @@ class OtpFragment : Fragment() {
     }
 
     private fun verifyOtp(otp: String) {
-        viewModel.signInWithPhoneAuthCredential(otp,userNumber)
+        val user = Users(uid = Utils.getCurrentUserId(), userPhoneNumber = userNumber, userAddress = null)
+        viewModel.signInWithPhoneAuthCredential(otp,userNumber,user)
 
         lifecycleScope.launch {
             viewModel.isSignedInSuccessfully.collect{otp ->
                 if (otp){
                     Utils.hideDialog()
                     Utils.showToast(requireContext(),"Logged In.")
+                    startActivity(Intent(requireActivity(), UsersMainActivity::class.java))
+                    requireActivity().finish()
                 }
             }
         }

@@ -1,9 +1,10 @@
-package com.example.myfoodapp
+package com.example.myfoodapp.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.myfoodapp.R
 
-class MainActivity : AppCompatActivity() {
+class AuthMainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
